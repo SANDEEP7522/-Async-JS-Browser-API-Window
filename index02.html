@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AJAX Request Example</title>
+</head>
+<body>
+  <h1>User List</h1>
+  <ul id="user-list"></ul> <!-- This will contain the list of user names -->
+
+  <script>
+    // Create a new XMLHttpRequest object
+    const xhr = new XMLHttpRequest();
+    
+    // Initialize a GET request to the API endpoint
+    xhr.open('GET', 'https://jsonplaceholder.typicode.com/todos/1/comments', true);
+    
+    // Set up a function that runs when the request's readyState changes
+    xhr.onreadystatechange = function() {
+      // Check if the request is complete
+      if (xhr.readyState === 4) {
+        // Check if the status is OK (200)
+        if (xhr.status === 200) {
+          // Parse the JSON response
+          const users = JSON.parse(xhr.responseText);
+          
+          // Log the names of the users in the console
+          console.log('User Names:');
+          users.forEach(user => console.log(user.name));
+
+          // Output the user names to the HTML page
+          const userList = document.getElementById('user-list');
+          users.forEach(user => {
+            const listItem = document.createElement('li');
+            listItem.textContent = user.name;
+            userList.appendChild(listItem);
+          });
+        } else {
+          // Log an error if the status is not OK
+          console.error('Error fetching data. Status:', xhr.status);
+        }
+      }
+    };
+    
+    // Send the request
+    xhr.send();
+  </script>
+</body>
+</html>
